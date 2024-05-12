@@ -6,10 +6,7 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.Member;
 import java.util.List;
@@ -58,5 +55,12 @@ public class MemberController {
         // 어떠한 html로 가져갈 데이터가 있다면 model로 정보전달
         model.addAttribute("memberList", memberDTOList);
         return "list";
+    }
+
+    @GetMapping("/member/{id}")
+    public String findById(@PathVariable("id") Long id, Model model) { // {id} 값을 가져오기 위해 @PathVariable 어노테이션 사용
+        MemberDTO memberDTO = memberService.findById(id);
+        model.addAttribute("member", memberDTO); // detail.html에 전달할 정보
+        return "detail";
     }
 }
