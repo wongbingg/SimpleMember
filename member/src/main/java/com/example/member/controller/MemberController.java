@@ -5,12 +5,14 @@ import com.example.member.service.MemberService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.lang.reflect.Member;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor // 생성자 만들어주는
@@ -50,5 +52,11 @@ public class MemberController {
         }
     }
 
-    
+    @GetMapping("/member/")
+    public String findAll(Model model) {
+        List<MemberDTO> memberDTOList = memberService.findAll();
+        // 어떠한 html로 가져갈 데이터가 있다면 model로 정보전달
+        model.addAttribute("memberList", memberDTOList);
+        return "list";
+    }
 }
