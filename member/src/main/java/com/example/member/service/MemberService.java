@@ -77,4 +77,8 @@ public class MemberService {
     public void update(MemberDTO memberDTO) {
         memberRepository.save(MemberEntity.toUpdateMemberEntity(memberDTO)); // 기존에 id가 존재하면 update를 해주고, 존재하지 않으면 insert를 수행한다.
     }
+
+    public void deleteById(Long id) {
+        memberRepository.deleteById(id);
+    }
 }
