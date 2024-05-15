@@ -89,4 +89,12 @@ public class MemberController {
         session.invalidate();
         return "index";
     }
+
+    @PostMapping("/member/email-check")
+    // ajax 요청을 받을 땐 @ResponseBody 어노테이션을 붙여줘야함.
+    public @ResponseBody String emailCheck(@RequestParam("memberEmail") String memberEmail) {
+        System.out.println("memberEmail = " + memberEmail);
+        String checkResult = memberService.emailCheck(memberEmail);
+        return checkResult;
+    }
 }

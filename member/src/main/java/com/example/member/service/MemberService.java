@@ -81,4 +81,15 @@ public class MemberService {
     public void deleteById(Long id) {
         memberRepository.deleteById(id);
     }
+
+    public String emailCheck(String memberEmail) {
+        Optional<MemberEntity> optionalMemberEntity = memberRepository.findByMemberEmail(memberEmail);
+        if (optionalMemberEntity.isPresent()) {
+            // 기존 아이디가 존재한다
+            return null;
+        } else {
+            // 신규 가입이 가능하다.
+            return "ok";
+        }
+    }
 }
