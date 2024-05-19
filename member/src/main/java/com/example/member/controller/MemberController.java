@@ -2,8 +2,13 @@ package com.example.member.controller;
 
 import com.example.member.dto.MemberDTO;
 import com.example.member.service.MemberService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.lang.reflect.Member;
 import java.util.List;
 
+@Tag(name = "Member", description = "Member 관련된 API 입니다.")
 @Controller
 @RequiredArgsConstructor // 생성자 만들어주는
 public class MemberController {
@@ -23,6 +29,8 @@ public class MemberController {
         return "save";
     }
 
+    @Operation(summary = "회원가입", description = "회원가입을 합니다.")
+    @ApiResponse(responseCode = "200", description = "회원가입에 성공하였습니다.")
     @PostMapping("/member/save")
     public String save(@ModelAttribute MemberDTO memberDTO) { // @RequestParam("memberEmail") 처럼 요소만 가져올 수도 있음.
         System.out.println("MemberController.save"); // soutm
@@ -36,6 +44,8 @@ public class MemberController {
         return "login";
     }
 
+    @Operation(summary = "로그인", description = "로그인 합니다.")
+    @ApiResponse(responseCode = "200", description = "로그인에 성공하였습니다.")
     @PostMapping("/member/login")
     public String login(@ModelAttribute MemberDTO memberDTO, HttpSession session) {
         MemberDTO loginResult = memberService.login(memberDTO);
@@ -45,9 +55,27 @@ public class MemberController {
             return "main";
         } else {
             // login 실패
+            // 실패시 실패코드를 넘겨주는 방법 필요
+            // 프론트 코드를 무시한다면 ResponseEntity<>로 반환해주어야 API의 기능이라고 볼 수 있음. 현재는 프론트까지 같이 고려하므로 적용 애매
             return "login";
         }
     }
+
+//    @Operation(summary = "로그인", description = "로그인 합니다.")
+//    @ApiResponse(responseCode = "200", description = "로그인에 성공하였습니다.")
+//    @ApiResponse(responseCode = "401", description = "로그인에 실패하였습니다.")
+//    @PostMapping("/member/login")
+//    public ResponseEntity<String> login(@ModelAttribute MemberDTO memberDTO, HttpSession session) {
+//        MemberDTO loginResult = memberService.login(memberDTO);
+//        if (loginResult != null) {
+//            // login 성공
+//            session.setAttribute("loginEmail", loginResult.getMemberEmail());
+//            return ResponseEntity.ok("main");
+//        } else {
+//            // login 실패
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("login");
+//        }
+//    }
 
     @GetMapping("/member/")
     public String findAll(Model model) {
